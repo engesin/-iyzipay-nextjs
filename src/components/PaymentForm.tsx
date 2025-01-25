@@ -1,7 +1,7 @@
 "use client";
 
 import { initiate3DSPayment, initiatePayment } from "@/app/actions/payment";
-import { CardInfo, Currency } from "@/app/types/payment";
+import { CardInfo, Currency } from "@/app/types/paymentTypes";
 import { useState } from "react";
 import { CardForm } from "./card/CardForm";
 import { CardPreview } from "./card/CardPreview";
