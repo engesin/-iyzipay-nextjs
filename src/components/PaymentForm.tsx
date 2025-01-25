@@ -1,10 +1,11 @@
 "use client";
 
-import { initiatePayment } from "@/app/actions/payment";
+import { initiate3DSPayment, initiatePayment } from "@/app/actions/payment";
 import { CardInfo, Currency } from "@/app/types/payment";
 import { useState } from "react";
 import { CardForm } from "./card/CardForm";
 import { CardPreview } from "./card/CardPreview";
+import { ThreeDSForm } from "./ThreeDSForm";
 
 export default function PaymentForm() {
   const [cardData, setCardData] = useState<CardInfo | null>(null);
@@ -13,24 +14,44 @@ export default function PaymentForm() {
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [error, setError] = useState<string | null>(null);
+  const [threeDSHtml, setThreeDSHtml] = useState<string | null>(null);
 
   const handleSubmit = async (formData: CardInfo) => {
     setStatus("loading");
     setError(null);
+    setThreeDSHtml(null);
 
     try {
-      const result = await initiatePayment(formData);
-      if (result.status === "success") {
-        setStatus("success");
+      let errorMessage: string | undefined;
+
+      if (formData.use3DS) {
+        const result = await initiate3DSPayment(formData);
+        if (result.status === "success" && result.threeDSHtmlContent) {
+          setThreeDSHtml(result.threeDSHtmlContent);
+          return;
+        }
+        errorMessage = result.errorMessage;
       } else {
-        setStatus("error");
-        setError(result.errorMessage || "Payment failed");
+        const result = await initiatePayment(formData);
+        console.log(result);
+        if (result.status === "success") {
+          setStatus("success");
+          return;
+        }
+        errorMessage = result.errorMessage;
       }
+
+      setStatus("error");
+      setError(errorMessage || "Payment failed");
     } catch (err) {
       setStatus("error");
       setError("An error occurred during payment");
     }
   };
+
+  if (threeDSHtml) {
+    return <ThreeDSForm htmlContent={threeDSHtml} />;
+  }
 
   return (
     <div className="w-full max-w-[1000px] mx-auto p-4 sm:p-8">
@@ -54,6 +75,7 @@ export default function PaymentForm() {
                   cvc: "",
                   price: "",
                   currency: Currency.TRY,
+                  use3DS: true,
                 }
               }
               isFlipped={isCardFlipped}
@@ -66,13 +88,14 @@ export default function PaymentForm() {
               onCVCBlur={() => setIsCardFlipped(false)}
               isLoading={status === "loading"}
               onCardDataChange={setCardData}
+              isNon3DSEnabled={true}
             />
           </div>
         </div>
 
         {/* Status Messages and Security Info */}
         <div className="max-w-[1000px] mx-auto">
-          {status === "success" && (
+          {!cardData?.use3DS && status === "success" && (
             <div className="rounded-lg bg-green-100 p-4 text-base font-medium text-green-800">
               <div className="flex items-center">
                 <svg
@@ -92,7 +115,6 @@ export default function PaymentForm() {
               </div>
             </div>
           )}
-
           {status === "error" && error && (
             <div className="rounded-lg bg-red-100 p-4 text-base font-medium text-red-800">
               <div className="flex items-center">

@@ -1,7 +1,7 @@
 "use client";
 
 import { CardInfo, Currency } from "@/app/types/payment";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type CardFormProps = {
   onSubmit: (data: CardInfo) => Promise<void>;
@@ -9,6 +9,7 @@ type CardFormProps = {
   onCVCBlur: () => void;
   onCardDataChange: (data: CardInfo) => void;
   isLoading: boolean;
+  isNon3DSEnabled?: boolean;
 };
 
 const inputClassName =
@@ -24,51 +25,64 @@ export function CardForm({
   onCVCBlur,
   onCardDataChange,
   isLoading,
+  isNon3DSEnabled = false,
 }: CardFormProps) {
-  const [formData, setFormData] = useState<CardInfo>({
-    cardHolderName: "",
-    cardNumber: "",
-    expireMonth: "",
-    expireYear: "",
-    cvc: "",
-    price: "",
-    currency: Currency.TRY,
-  });
+  const defaultFormData = useMemo(
+    () => ({
+      cardHolderName: "",
+      cardNumber: "",
+      expireMonth: "",
+      expireYear: "",
+      cvc: "",
+      price: "",
+      currency: Currency.TRY,
+      use3DS: !isNon3DSEnabled,
+    }),
+    [isNon3DSEnabled]
+  );
 
-  const handleFormChange = (field: keyof CardInfo, value: string) => {
+  const [formData, setFormData] = useState<CardInfo>(defaultFormData);
+
+  const handleFormChange = (field: keyof CardInfo, value: string | boolean) => {
     let processedValue = value;
 
-    switch (field) {
-      case "cardNumber":
-        // Remove non-numeric characters and limit to 16 digits
-        processedValue = value.replace(/\D/g, "").slice(0, 16);
-        // Add spaces every 4 digits for display
-        processedValue = processedValue.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
-        break;
-      case "expireMonth":
-        // Remove non-numeric characters and limit to 2 digits
-        processedValue = value.replace(/\D/g, "").slice(0, 2);
-        // Ensure month is between 1 and 12
-        if (processedValue) {
-          const month = parseInt(processedValue);
-          if (month > 12) processedValue = "12";
-          if (month < 1 && processedValue.length === 2) processedValue = "01";
-        }
-        break;
-      case "expireYear":
-        // Remove non-numeric characters and limit to 4 digits
-        processedValue = value.replace(/\D/g, "").slice(0, 4);
-        break;
-      case "cvc":
-        // Remove non-numeric characters and limit to 3 digits
-        processedValue = value.replace(/\D/g, "").slice(0, 3);
-        break;
-      case "currency":
-        // Ensure currency is one of the valid options
-        processedValue = currencies.includes(value as Currency) ? value : "TRY";
-        break;
-      default:
-        break;
+    if (typeof value === "string") {
+      switch (field) {
+        case "cardNumber":
+          // Remove non-numeric characters and limit to 16 digits
+          processedValue = value.replace(/\D/g, "").slice(0, 16);
+          // Add spaces every 4 digits for display
+          processedValue = processedValue
+            .replace(/(\d{4})(?=\d)/g, "$1 ")
+            .trim();
+          break;
+        case "expireMonth":
+          // Remove non-numeric characters and limit to 2 digits
+          processedValue = value.replace(/\D/g, "").slice(0, 2);
+          // Ensure month is between 1 and 12
+          if (processedValue) {
+            const month = parseInt(processedValue);
+            if (month > 12) processedValue = "12";
+            if (month < 1 && processedValue.length === 2) processedValue = "01";
+          }
+          break;
+        case "expireYear":
+          // Remove non-numeric characters and limit to 4 digits
+          processedValue = value.replace(/\D/g, "").slice(0, 4);
+          break;
+        case "cvc":
+          // Remove non-numeric characters and limit to 3 digits
+          processedValue = value.replace(/\D/g, "").slice(0, 3);
+          break;
+        case "currency":
+          // Ensure currency is one of the valid options
+          processedValue = currencies.includes(value as Currency)
+            ? value
+            : "TRY";
+          break;
+        default:
+          break;
+      }
     }
 
     const newFormData = { ...formData, [field]: processedValue };
@@ -78,7 +92,12 @@ export function CardForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    try {
+      setFormData(defaultFormData);
+      await onSubmit(formData);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -96,6 +115,7 @@ export function CardForm({
             className={inputClassName}
             placeholder="John Doe"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -113,6 +133,7 @@ export function CardForm({
             required
             inputMode="numeric"
             pattern="[0-9\s]*"
+            disabled={isLoading}
           />
         </div>
 
@@ -131,6 +152,7 @@ export function CardForm({
               required
               inputMode="numeric"
               pattern="[0-9]*"
+              disabled={isLoading}
             />
           </div>
 
@@ -148,6 +170,7 @@ export function CardForm({
               required
               inputMode="numeric"
               pattern="[0-9]*"
+              disabled={isLoading}
             />
           </div>
 
@@ -168,6 +191,7 @@ export function CardForm({
               maxLength={3}
               inputMode="numeric"
               pattern="[0-9]*"
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -187,6 +211,7 @@ export function CardForm({
               required
               min="1"
               step="0.01"
+              disabled={isLoading}
             />
           </div>
 
@@ -200,6 +225,7 @@ export function CardForm({
               onChange={(e) => handleFormChange("currency", e.target.value)}
               className={inputClassName}
               required
+              disabled={isLoading}
             >
               {currencies.map((currency) => (
                 <option key={currency} value={currency}>
@@ -209,6 +235,25 @@ export function CardForm({
             </select>
           </div>
         </div>
+
+        {isNon3DSEnabled && (
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="use3DS"
+              checked={formData.use3DS}
+              onChange={(e) => handleFormChange("use3DS", e.target.checked)}
+              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              disabled={isLoading}
+            />
+            <label
+              htmlFor="use3DS"
+              className="ml-2 block text-sm text-gray-900"
+            >
+              Use 3D Secure Payment
+            </label>
+          </div>
+        )}
 
         <button
           type="submit"

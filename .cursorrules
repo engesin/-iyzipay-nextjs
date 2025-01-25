@@ -1,0 +1,9 @@
+for nextjs projects, use the following rules:
+
+- A component accessed data, headers, params, searchParams ashould be awaited before using its properties
+- use yarn for package manager
+- prefer to use server components for the page if not necessary to use client components.
+- prefer to use server actions for the page if not necessary to use client actions.
+- call api in the server actions and use revalidateTag/revalidatePath for the api calls
+- write components as generic as possible to be used in different pages
+- use action for button click instead of onClick to handle the button click in the server actions if no user interaction is needed
