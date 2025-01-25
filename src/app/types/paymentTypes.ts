@@ -1,3 +1,5 @@
+import { PaymentResult, ThreeDSInitializePaymentResult } from "iyzipay";
+
 export enum Currency {
   TRY = "TRY",
   USD = "USD",
@@ -15,25 +17,10 @@ export type CardInfo = {
   use3DS: boolean;
 };
 
-export type ThreeDSInitResponse = {
-  status: string;
+export interface ThreeDSInitResponse extends ThreeDSInitializePaymentResult {
   errorMessage?: string;
-  threeDSHtmlContent?: string;
-  paymentId?: string;
-  conversationId?: string;
-};
+}
 
-export type ThreeDSCompleteResponse = {
-  status: string;
+export interface IyzipayResponse extends PaymentResult {
   errorMessage?: string;
-  paymentId?: string;
-  conversationId?: string;
-  fraudStatus?: number;
-  [key: string]: any;
-};
-
-export type IyzipayResponse = {
-  status: string;
-  errorMessage?: string;
-  [key: string]: any;
-};
+}

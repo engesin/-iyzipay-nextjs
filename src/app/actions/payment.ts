@@ -3,7 +3,6 @@
 import {
   CardInfo,
   IyzipayResponse,
-  ThreeDSCompleteResponse,
   ThreeDSInitResponse,
 } from "@/app/types/paymentTypes";
 import { iyzipay } from "@/lib/iyzico";
@@ -144,7 +143,7 @@ export async function initiate3DSPayment(
 export async function complete3DSPayment(
   paymentId: string,
   conversationId: string
-): Promise<ThreeDSCompleteResponse> {
+): Promise<IyzipayResponse> {
   try {
     const request = {
       locale: Iyzipay.LOCALE.EN,
@@ -152,10 +151,10 @@ export async function complete3DSPayment(
       paymentId,
     };
 
-    return new Promise<ThreeDSCompleteResponse>((resolve, reject) => {
+    return new Promise<IyzipayResponse>((resolve, reject) => {
       iyzipay.threedsPayment.create(
         request,
-        (err: Error, result: ThreeDSCompleteResponse) => {
+        (err: Error, result: IyzipayResponse) => {
           if (err) {
             reject(err);
           } else {

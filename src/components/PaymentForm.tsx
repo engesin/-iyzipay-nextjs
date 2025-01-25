@@ -43,7 +43,7 @@ export default function PaymentForm() {
 
       setStatus("error");
       setError(errorMessage || "Payment failed");
-    } catch (err) {
+    } catch {
       setStatus("error");
       setError("An error occurred during payment");
     }
