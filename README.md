@@ -2,7 +2,7 @@
 
 This project demonstrates how to integrate Iyzico payment gateway with a Next.js application, featuring a beautiful credit card form with real-time card preview and support for both regular and 3D Secure payments.
 
-![Demo Preview](demo.gif)
+![Demo Preview](public/demo.png)
 
 ## Features
 
