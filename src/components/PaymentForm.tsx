@@ -33,7 +33,6 @@ export default function PaymentForm() {
         errorMessage = result.errorMessage;
       } else {
         const result = await initiatePayment(formData);
-        console.log(result);
         if (result.status === "success") {
           setStatus("success");
           return;
