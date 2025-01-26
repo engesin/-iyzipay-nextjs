@@ -1,4 +1,9 @@
-import { PaymentResult, ThreeDSInitializePaymentResult } from "iyzipay";
+import {
+  CheckoutFormInitialResult,
+  CheckoutFormRetrieveResult,
+  PaymentResult,
+  ThreeDSInitializePaymentResult,
+} from "iyzipay";
 
 export enum Currency {
   TRY = "TRY",
@@ -22,5 +27,13 @@ export interface ThreeDSInitResponse extends ThreeDSInitializePaymentResult {
 }
 
 export interface IyzipayResponse extends PaymentResult {
+  errorMessage?: string;
+}
+
+export interface CheckoutFormInitResponse extends CheckoutFormInitialResult {
+  errorMessage?: string;
+}
+
+export interface CheckoutFormResponse extends CheckoutFormRetrieveResult {
   errorMessage?: string;
 }

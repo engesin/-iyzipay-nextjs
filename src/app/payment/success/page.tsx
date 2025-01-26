@@ -1,6 +1,15 @@
 import Link from "next/link";
 
-export default function PaymentSuccessPage() {
+type SuccessPageProps = {
+  searchParams: Promise<{ type?: string }>;
+};
+
+export default async function PaymentSuccessPage({
+  searchParams,
+}: SuccessPageProps) {
+  const { type } = await searchParams;
+  const returnUrl = type === "checkout" ? "/checkout" : "/3ds-non3ds";
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 text-center">
@@ -27,7 +36,7 @@ export default function PaymentSuccessPage() {
         </p>
         <div className="mt-8">
           <Link
-            href="/"
+            href={returnUrl}
             className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Return to Home
