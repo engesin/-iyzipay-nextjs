@@ -8,7 +8,6 @@ import { iyzipay } from "@/lib/iyzico";
 import Iyzipay, { ThreeDSInitializePaymentRequestData } from "iyzipay";
 
 export async function initiateCheckoutForm(): Promise<CheckoutFormInitResponse> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   try {
     const request: ThreeDSInitializePaymentRequestData = {
       locale: Iyzipay.LOCALE.EN,
