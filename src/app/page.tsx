@@ -21,7 +21,7 @@ export default function HomePage() {
             </p>
           </Link>
 
-          <Link
+          <a
             href="/checkout"
             className="block p-6 bg-white rounded-lg border border-gray-200 hover:border-indigo-500 transition-colors"
           >
@@ -32,9 +32,9 @@ export default function HomePage() {
               Test payment using iyzico&apos;s hosted checkout form with various
               display options.
             </p>
-          </Link>
+          </a>
 
-          <Link
+          <a
             href="/checkout-popup"
             className="block p-6 bg-white rounded-lg border border-gray-200 hover:border-indigo-500 transition-colors"
           >
@@ -45,7 +45,7 @@ export default function HomePage() {
               Test payment using iyzico&apos;s hosted checkout form with popup
               display option.
             </p>
-          </Link>
+          </a>
         </div>
       </div>
     </main>
