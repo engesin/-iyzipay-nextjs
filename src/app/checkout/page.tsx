@@ -7,6 +7,7 @@ import { Suspense } from "react";
 const CheckoutFormRequestComponent = async () => {
   const result: CheckoutFormInitResponse = await initiateCheckoutForm();
   if (!result || !result.checkoutFormContent) {
+    console.log("result", result);
     return (
       <CheckoutError message="Unable to initialize the checkout form. Please try again later." />
     );
