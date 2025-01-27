@@ -1,7 +1,7 @@
-import { initiateCheckoutForm } from "@/app/actions/checkout";
-import { CheckoutFormInitResponse } from "@/app/types/paymentTypes";
 import { CheckoutError } from "@/components/CheckoutError";
 import { CheckoutForm } from "@/components/CheckoutForm";
+import { initiateCheckoutForm } from "@/lib/actions/checkout";
+import { CheckoutFormInitResponse } from "@/types/paymentTypes";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";

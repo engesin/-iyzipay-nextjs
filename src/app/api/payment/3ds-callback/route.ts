@@ -1,4 +1,4 @@
-import { complete3DSPayment } from "@/app/actions/payment";
+import { complete3DSPayment } from "@/lib/actions/payment";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {

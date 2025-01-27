@@ -1,6 +1,6 @@
 "use client";
 
-import { CardInfo } from "@/app/types/paymentTypes";
+import { CardInfo } from "@/types/paymentTypes";
 
 type CardFrontProps = {
   cardData: CardInfo;

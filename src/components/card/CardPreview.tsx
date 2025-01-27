@@ -1,8 +1,8 @@
 "use client";
 
-import { CardInfo } from "@/app/types/paymentTypes";
 import { CardBack } from "@/components/card/CardBack";
 import { CardFront } from "@/components/card/CardFront";
+import { CardInfo } from "@/types/paymentTypes";
 
 type CardPreviewProps = {
   cardData: CardInfo;

@@ -1,5 +1,5 @@
-import { retrieveCheckoutForm } from "@/app/actions/checkout";
-import { CheckoutFormResponse } from "@/app/types/paymentTypes";
+import { retrieveCheckoutForm } from "@/lib/actions/checkout";
+import { CheckoutFormResponse } from "@/types/paymentTypes";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {

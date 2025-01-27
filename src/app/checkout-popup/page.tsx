@@ -1,6 +1,6 @@
-import { initiateCheckoutForm } from "@/app/actions/checkout";
-import { CheckoutFormInitResponse } from "@/app/types/paymentTypes";
 import { CheckoutFormPopup } from "@/components/CheckoutFormPopup";
+import { initiateCheckoutForm } from "@/lib/actions/checkout";
+import { CheckoutFormInitResponse } from "@/types/paymentTypes";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

@@ -1,10 +1,10 @@
 "use server";
 
+import { iyzipay } from "@/lib/iyzico";
 import {
   CheckoutFormInitResponse,
   CheckoutFormResponse,
-} from "@/app/types/paymentTypes";
-import { iyzipay } from "@/lib/iyzico";
+} from "@/types/paymentTypes";
 import Iyzipay, { ThreeDSInitializePaymentRequestData } from "iyzipay";
 
 export async function initiateCheckoutForm(): Promise<CheckoutFormInitResponse> {

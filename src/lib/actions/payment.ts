@@ -1,11 +1,11 @@
 "use server";
 
+import { iyzipay } from "@/lib/iyzico";
 import {
   CardInfo,
   IyzipayResponse,
   ThreeDSInitResponse,
-} from "@/app/types/paymentTypes";
-import { iyzipay } from "@/lib/iyzico";
+} from "@/types/paymentTypes";
 import Iyzipay, {
   PaymentRequestData,
   ThreeDSInitializePaymentRequestData,

@@ -1,6 +1,6 @@
 "use client";
 
-import { CardInfo, Currency } from "@/app/types/paymentTypes";
+import { CardInfo, Currency } from "@/types/paymentTypes";
 import { useMemo, useState } from "react";
 
 type CardFormProps = {
