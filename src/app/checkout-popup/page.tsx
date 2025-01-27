@@ -2,6 +2,9 @@ import { initiateCheckoutForm } from "@/app/actions/checkout";
 import { CheckoutFormInitResponse } from "@/app/types/paymentTypes";
 import { CheckoutFormPopup } from "@/components/CheckoutFormPopup";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function CheckoutPopupPage() {
   const result: CheckoutFormInitResponse = await initiateCheckoutForm();
 

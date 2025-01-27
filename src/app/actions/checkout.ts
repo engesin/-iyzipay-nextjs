@@ -70,7 +70,6 @@ export async function initiateCheckoutForm(): Promise<CheckoutFormInitResponse> 
         if (err) {
           reject(err);
         } else {
-          console.log("CheckoutFormInitResponse", result);
           resolve(result);
         }
       });
@@ -94,7 +93,6 @@ export async function retrieveCheckoutForm(
         if (err) {
           reject(err);
         } else {
-          console.log("CheckoutFormResponse", result);
           resolve(result);
         }
       });
